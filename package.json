@@ -9,9 +9,11 @@
   },
   "dependencies": {
     "@axe-core/puppeteer": "^4.10.2",
+    "@flaticon/flaticon-uicons": "^3.3.1",
     "@google/genai": "^1.15.0",
     "axe-core": "^4.10.3",
     "axe-puppeteer": "^1.1.1",
+    "daisyui": "^5.0.50",
     "next": "15.5.0",
     "node-fetch": "^2.7.0",
     "pa11y": "^9.0.0",
