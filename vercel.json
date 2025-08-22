@@ -1,0 +1,12 @@
+{
+    "build": {
+        "env": {
+        "PUPPETEER_CACHE_DIR": "/tmp"
+        }
+    },
+    "functions": {
+        "api/**/*.js": {
+        "includeFiles": "node_modules/@sparticuz/chromium/bin/**/*"
+        }
+    }
+}
