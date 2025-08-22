@@ -4,7 +4,7 @@ import {analyse} from "@/lib/script";
 import SearchBar from "@/components/SearchBar";
 
 export default function Home() {
-    let [ url, setUrl ] = useState(null);
+    let [ url, setUrl ] = useState("");
     let [ deepSearch, setDeepSearch ] = useState(false);
 
     const updateInput = () => {
@@ -20,7 +20,7 @@ export default function Home() {
                     className="w-50 h-50 rounded-full object-cover"
                 />
                 <div className="w-full flex justify-center items-center relative mb-5">
-                    <SearchBar deepSearch={deepSearch} setDeepSearch={() => {setDeepSearch(!deepSearch);setUrl(null);setUrl(url);}} placeholder="Enter URL" onChange={(e:any) => {setUrl(e.target.value)}}></SearchBar>
+                    <SearchBar deepSearch={deepSearch} setDeepSearch={() => {setUrl("");setDeepSearch(!deepSearch);}} placeholder="Enter URL" onChange={(e:any) => {setUrl(e.target.value)}}></SearchBar>
                 </div>
             </div>
             <Results url={url} deepSearch={deepSearch}></Results>
