@@ -65,7 +65,7 @@ export default function Results({ url, deepSearch } : { url: any, deepSearch: an
                             </a>
                         </div>
                     </div>
-                    <div className="rounded-xl border border-slate-300 dark:border-slate-700 mb-5 md:p-10 p-5 md:max-h-[500px] max-h-none flex flex-col items-center">
+                    <div className="rounded-xl bg-slate-100 border border-slate-300 dark:border-slate-700 mb-5 md:p-10 p-5 md:max-h-[500px] max-h-none flex flex-col items-center">
                         {/* <DonutChart data={chartData}></DonutChart> */}
                         <RadarChart metrics={{ performance: data.metrics?.ev?.overall_ratings, security: data.details?.securityHeaders?.overall_ratings, seo: data.ev?.overall_ratings }}></RadarChart>
                     </div>
