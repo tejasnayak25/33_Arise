@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { page } from "@/lib/puppeteer-setup";
 import { AxePuppeteer } from '@axe-core/puppeteer';
+import { getBrowser } from "@/lib/utils";
 
 export async function POST(request: NextRequest) {
     try {
         let { url } = await request.json();
+        const browser:any = await getBrowser();
+        const page = await browser.newPage();
+
         await page.goto(url, { waitUntil: "networkidle0" });
 
         // Inject axe-core and run accessibility tests
@@ -13,6 +16,8 @@ export async function POST(request: NextRequest) {
         if (!results) {
             return NextResponse.json({ error: "Scan failed" }, { status: 500 });
         }
+
+        await browser.close();
 
         return NextResponse.json({ results: results.violations });
     } catch (e) {

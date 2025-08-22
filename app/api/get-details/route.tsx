@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { page } from "@/lib/puppeteer-setup";
-import { getIP, checkSecurity } from "@/lib/utils";
+import { getIP, checkSecurity, getBrowser } from "@/lib/utils";
 import { runAI } from "@/lib/ai-init";
 
 export async function POST(request: NextRequest) {
@@ -40,6 +39,8 @@ export async function POST(request: NextRequest) {
                 securityHeaders = JSON.parse(securityHeaders);
             }
         }
+        const browser:any = await getBrowser();
+        const page = await browser.newPage();
         await page.goto(url, { waitUntil: "domcontentloaded" });
         let title = await page.title();
         return NextResponse.json({

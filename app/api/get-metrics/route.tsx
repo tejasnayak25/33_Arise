@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { page } from "@/lib/puppeteer-setup";
 import { runAI } from "@/lib/ai-init";
+import { getBrowser } from "@/lib/utils";
 
 export async function POST(request: NextRequest) {
     try {
         let { url } = await request.json();        
+        const browser:any = await getBrowser();
+        const page = await browser.newPage();
         await page.goto(url, { waitUntil: "networkidle0" });
 
         const metrics = await page.metrics();

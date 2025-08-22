@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { page } from "@/lib/puppeteer-setup";
-import { sanitizeString } from "@/lib/utils";
+import { getBrowser, sanitizeString } from "@/lib/utils";
 import { runAI } from "@/lib/ai-init";
 
 export async function POST(request: NextRequest) {
     try {
         let { url } = await request.json();
+        const browser:any = await getBrowser();
+        const page = await browser.newPage();
         await page.goto(url);
         let meta = await page.evaluate(() => {
             let metaTags = document.querySelectorAll("meta,title,link,h1,h2,h3,h4,h5,h6,img,a,p,ul,ol,script");

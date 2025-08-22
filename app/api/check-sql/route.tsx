@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { page } from "@/lib/puppeteer-setup";
 import { runAI } from "@/lib/ai-init";
 import { runScan } from "@/lib/scanner-index";
 
