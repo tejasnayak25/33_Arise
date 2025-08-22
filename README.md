@@ -1,4 +1,29 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+
+# Web Auditor
+
+A web security auditing tool built with Next.js to help you identify common vulnerabilities in your web applications.
+
+This tool uses a headless browser to simulate user interaction and test for security flaws like SQL Injection and Cross-Site Scripting (XSS).
+
+## Features
+
+-   **SQL Injection (SQLi) Scanning**:
+    -   Tests URL parameters for error-based SQLi vulnerabilities.
+    -   Detects time-based blind SQLi vulnerabilities by measuring response delays.
+-   **Cross-Site Scripting (XSS) Scanning**:
+    -   Scans for reflected XSS vulnerabilities in URL parameters.
+    -   Automatically discovers forms and tests input fields for stored XSS.
+-   **Headless Browser Testing**: Utilizes Puppeteer to run tests in a realistic browser environment.
+-   **JSON Reporting**: Generates detailed reports of any findings in JSON format.
+
+## How It Works
+
+The Web Auditor is composed of several workers that target specific vulnerability types:
+
+-   `sqlWorker`: Injects a variety of SQL payloads into URL parameters and analyzes the page content and response time for signs of a vulnerability.
+-   `urlWorker`: Appends XSS payloads to the URL to test for reflected XSS, listening for JavaScript execution via console logs or dialog pop-ups.
+-   `formWorker` & `inputWorker`: These work together to find all forms on a page, identify input fields, and then systematically inject XSS payloads to test for stored XSS.
+-   `reportWorker`: Collects findings from all workers and saves them into a structured JSON report.
 
 ## Getting Started
 
