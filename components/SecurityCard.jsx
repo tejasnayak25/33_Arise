@@ -17,7 +17,7 @@ export default function SecurityCard({ data }) {
         onClick={() => setIsOpen(!isOpen)}
       >
         <div className="flex md:flex-row flex-col">
-          <p className="text-xl font-bold flex items-center gap-3 m-0 md:pr-10 pr-0 md:pb-0 pb-5 md:border-r border-r-0 md:border-b-0 border-b border-slate-300 dark:border-slate-700">
+          <p className="text-xl font-bold flex items-center gap-3 m-0 md:pr-10 pr-0 md:pb-0 pb-5 md:border-b-0 border-b border-slate-300 dark:border-slate-700">
             <i className="fi fi-sr-compliance-document"></i>
             <span>Security Evaluation</span>
           </p>

@@ -29,7 +29,7 @@ export default function SEOCard({ data }) {
           </p>
           <p className="text-xl font-bold flex items-center gap-3 m-0 md:px-10 px-0 md:py-0 py-5 border-slate-300 dark:border-slate-700">
             <i className="fi fi-sr-star text-yellow-300"></i>
-            <span>{data.overall_ratings} / 10</span>
+            <span>{data.overall_ratings ?? 0} / 10</span>
           </p>
         </div>
 
@@ -57,7 +57,7 @@ export default function SEOCard({ data }) {
                 <h3 className="font-semibold text-lg">{tag.name}</h3>
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-medium bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded">
-                    Rating: {tag.rating} / 10
+                    Rating: {tag.rating ?? 0} / 10
                   </span>
                   <FiChevronDown
                     className={`transition-transform duration-300 ${

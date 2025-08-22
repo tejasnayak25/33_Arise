@@ -3,29 +3,26 @@ import { FiChevronDown } from "react-icons/fi";
 
 export default function AccessibilityCard({ issues }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [openIssues, setOpenIssues] = useState({});
+  const [openIssues, setOpenIssues] = useState(() => issues.map(() => false));
+
+  function toggleIssue(idx) {
+    setOpenIssues((prev) => {
+      const newOpen = [...prev];
+      newOpen[idx] = !newOpen[idx];
+      return newOpen;
+    });
+  }
 
   useEffect(() => {
     const handleOpenCollapsible = () => {
       setIsOpen(true);
-
-      // Open all children
-      const allOpen = {};
-      openIssues.forEach((_, idx) => {
-        allOpen[idx] = true;
-      });
-      setOpenIssues(allOpen);
+      setOpenIssues(issues.map(() => true));
     };
 
     const handleCloseCollapsible = () => {
-        setIsOpen(false);
-
-        const allOpen = {};
-        openIssues.forEach((_, idx) => {
-            allOpen[idx] = false;
-        });
-        setOpenIssues(allOpen);
-    }
+      setIsOpen(false);
+      setOpenIssues(issues.map(() => false));
+    };
 
     window.addEventListener("open-collapsible", handleOpenCollapsible);
     window.addEventListener("close-collapsible", handleCloseCollapsible);
@@ -44,7 +41,7 @@ export default function AccessibilityCard({ issues }) {
         onClick={() => setIsOpen(!isOpen)}
       >
         <div className="flex md:flex-row flex-col">
-          <p className="text-xl font-bold flex items-center gap-3 m-0 md:pr-10 pr-0 md:pb-0 pb-5 md:border-r border-r-0 md:border-b-0 border-b border-slate-300 dark:border-slate-700">
+          <p className="text-xl font-bold flex items-center gap-3 m-0 md:pr-10 pr-0 md:pb-0 pb-5 md:border-b-0 border-b border-slate-300 dark:border-slate-700">
             <i className="fi fi-sr-universal-access"></i>
             <span>Accessibility Issues</span>
           </p>

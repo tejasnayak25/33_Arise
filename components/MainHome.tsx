@@ -5,6 +5,7 @@ import SearchBar from "@/components/SearchBar";
 
 export default function Home() {
     let [ url, setUrl ] = useState(null);
+    let [ deepSearch, setDeepSearch ] = useState(false);
 
     const updateInput = () => {
         let elem:any = document?.querySelector("input#url-input");setUrl(elem?.value ?? "")
@@ -19,10 +20,10 @@ export default function Home() {
                     className="w-50 h-50 rounded-full object-cover"
                 />
                 <div className="w-full flex justify-center items-center relative mb-5">
-                    <SearchBar placeholder="Enter URL" onChange={(e:any) => {setUrl(e.target.value)}}></SearchBar>
+                    <SearchBar deepSearch={deepSearch} setDeepSearch={setDeepSearch} placeholder="Enter URL" onChange={(e:any) => {setUrl(e.target.value)}}></SearchBar>
                 </div>
             </div>
-            <Results url={url}></Results>
+            <Results url={url} deepSearch={deepSearch}></Results>
         </div>
     );
 }

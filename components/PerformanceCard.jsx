@@ -26,7 +26,7 @@ export default function PerformanceCard({ data }) {
           </p>
           <p className="text-xl font-bold flex items-center gap-3 m-0 md:px-10 px-0 md:py-0 py-5 border-slate-300 dark:border-slate-700">
             <i className="fi fi-sr-star text-yellow-300"></i>
-            <span>{data.metrics.ev.overall_ratings} / 10</span>
+            <span>{data.metrics?.ev?.overall_ratings ?? 0} / 10</span>
           </p>
         </div>
 
