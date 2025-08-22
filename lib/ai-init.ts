@@ -93,7 +93,55 @@ const config: Record<string, any> = {
         `
         }
         }
+    },
+    eval_security: {
+  config: {
+    responseMimeType: "application/json",
+    responseSchema: {
+      type: Type.OBJECT,
+      required: ["headers", "overall_ratings"],
+      properties: {
+        headers: {
+          type: Type.ARRAY,
+          items: {
+            type: Type.OBJECT,
+            required: ["name", "analysis", "fixed_tags"],
+            properties: {
+              name: { type: Type.STRING },
+              analysis: { type: Type.STRING },
+              fixed_tags: {
+                type: Type.ARRAY,
+                items: { type: Type.STRING },
+              },
+            },
+          },
+        },
+        overall_ratings: {
+          type: Type.NUMBER,
+          minimum: 1,
+          maximum: 10
+        },
+      },
+    },
+    systemInstruction: {
+      text: `
+You are an expert web security analyst. 
+You will receive information about HTTP headers of a web page. 
+Your task is to evaluate the headers for security best practices (such as Content-Security-Policy, Strict-Transport-Security, X-Frame-Options, etc.). 
+
+Return ONLY a valid JSON object that matches the given schema:
+
+- "headers" should be an array of objects, each containing:
+  - "name": the name of the header
+  - "analysis": a short description of security issues or compliance
+  - "fixed_tags": suggestions or fixed recommendations
+- "overall_ratings": a numeric score (1-10) summarizing the overall security of headers
+
+Do NOT include greetings or explanations. Only output the JSON object.
+      `
     }
+  }
+}
 };
 
 export const runAI = async function runAI(prompt: any, type: any) {

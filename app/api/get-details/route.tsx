@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { page } from "@/lib/puppeteer-setup";
 import { getIP, checkSecurity } from "@/lib/utils";
+import { runAI } from "@/lib/ai-init";
 
 export async function POST(request: NextRequest) {
     try {
@@ -30,7 +31,11 @@ export async function POST(request: NextRequest) {
             threats = safeData.matches.map((match:any) => match.threatType);
         }
         let ip = await getIP(url);
-        let security = await checkSecurity(url);
+        let security:any = await checkSecurity(url);
+        if(security) {
+            security = await runAI(security, "eval_security");
+            console.log(security)
+        }
         await page.goto(url, { waitUntil: "domcontentloaded" });
         let title = await page.title();
         return NextResponse.json({
@@ -42,6 +47,7 @@ export async function POST(request: NextRequest) {
             threats
         });
     } catch (e) {
+        console.log(e)
         return NextResponse.json({ error: e });
     }
 }

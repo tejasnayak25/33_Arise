@@ -7,14 +7,10 @@ const Sidebar = ({ sidebarVisible }) => {
       {/* Profile Circle */}
       <div className="mb-6">
     <img
-          src="./src/assets/neww.jpg" // Replace with your actual image source
+          src="./sitescan_without_bg.png" // Replace with your actual image source
           alt="Profile"
-          className="w-16 h-16 rounded-full object-cover"
+          className="w-40 h-40 rounded-full object-cover"
         />
-      </div>
-      {/* Site Title */}
-      <div className="mb-10">
-        <span className="text-lg font-medium">Site-Scan</span>
       </div>
       {/* Menu */}
       <nav className="flex flex-col w-full space-y-2 px-4">

@@ -1,10 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FiChevronDown } from "react-icons/fi"; // react-icons arrow
 import PerformanceStats from "./PerformanceStats";
 import PerformanceSuggestions from "./PerformanceSuggestions";
 
 export default function PerformanceCard({ data }) {
   const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+      window.addEventListener("open-collapsible", () => {
+          setIsOpen(true);
+      });
+  }, []);
 
   return (
     <div className="rounded-xl border border-slate-300 dark:border-slate-700 mb-5">

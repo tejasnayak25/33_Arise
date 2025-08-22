@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { changeTheme } from "@/lib/theme";
+import Heading from "@/components/Heading";
 
 const TopNav = ({ toggleSidebar, sidebarVisible }) => {
   let [theme, setTheme] = useState(null);
@@ -13,13 +14,17 @@ const TopNav = ({ toggleSidebar, sidebarVisible }) => {
   return (
     <header className="flex items-center relative justify-between px-6 py-4 text-slate-900 dark:text-slate-100">
       {/* Hamburger Menu */}
-      <button
-        onClick={toggleSidebar}
-        aria-label="Toggle menu"
-        className="text-2xl focus:outline-none"
-      >
-        <i className={`fi ${sidebarVisible ? "fi-sr-angle-left" : "fi-br-menu-burger"}`}></i>
-      </button>
+      <div className="flex gap-5 items-center">
+        <button
+          onClick={toggleSidebar}
+          aria-label="Toggle menu"
+          className="text-2xl focus:outline-none cursor-pointer active:scale-95 transition-all"
+        >
+          <i className={`fi ${sidebarVisible ? "fi-sr-angle-left" : "fi-br-menu-burger"}`}></i>
+        </button>
+
+        <Heading></Heading>
+      </div>
 
       {/* Right Section: Search, Icons, Profile */}
       <div className="flex items-center space-x-4">

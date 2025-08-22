@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
-import { loadMeta, loadScreenshot, loadDetails, loadMetrics } from "@/lib/script";
+import { loadMeta, loadScreenshot, loadDetails, loadMetrics, loadAccessibility } from "@/lib/script";
 import PerformanceCard from "@/components/PerformanceCard";
+import SEOCard from "@/components/SEOCard";
+import AccessibilityCard from "@/components/AccessibilityCard";
+import SecurityCard from "@/components/SecurityCard";
 
 export default function Results({ url } : { url: any }) {
     let [ data, setData ] = useState<any>(null);
@@ -15,6 +18,8 @@ export default function Results({ url } : { url: any }) {
                 d.details = details;
                 let metrics = await loadMetrics(url);
                 d.metrics = metrics;
+                let access = await loadAccessibility(url);
+                d.access = access;
                 setData(d);
                 setLoading(false);
             });
@@ -24,7 +29,7 @@ export default function Results({ url } : { url: any }) {
         <div id="results" className={`w-full transition-all ${loading || data ? "flex-1" : ""}`}>
             { data ? (
                 <div className="w-full flex-1 transition-all md:px-32 px-0">
-                    <p className="text-xl text-center mb-5">Analysis</p>
+                    <p className="text-xl text-center mb-10 mt-20 font-bold">Analysis Report</p>
                     <div className="flex md:flex-row flex-col rounded-xl border border-slate-300 dark:border-slate-700 overflow-hidden w-full mb-5">
                         <img
                             src={data.screenshot}
@@ -49,7 +54,22 @@ export default function Results({ url } : { url: any }) {
                         <p className="text-xl font-bold flex items-center gap-3 m-0 md:px-10 px-0 md:py-0 py-5 md:border-r border-r-0 md:border-b-0 border-b border-slate-300 dark:border-slate-700"><span className={`${data.details.blackListed ? "bg-red-500" : "bg-green-500"} w-6 h-6 rounded-full`}></span><span>{data.details.blackListed ? "Site is Blacklisted" : "Site is not Blacklisted"}</span></p>
                         { data.details.threats ? (<p className={`text-xl font-bold flex items-center gap-3 m-0 md:px-10 px-0 md:py-0 py-5 md:border-r border-r-0 md:border-b-0 border-b border-slate-300 dark:border-slate-700 relative ${data.details.threats.length > 0 ? "text-red-500" : "text-slate-700 dark:text-slate-500"}`}><span className={`${data.details.threats.length > 0 ? "bg-red-500" : "bg-green-500"} w-6 h-6 rounded-full`}></span><span>{data.details.threats?.length > 0 ? `${data.details.threats.length} Threats found! <i class=" absolute right-0 fi fi-sr-arrow-up-right-from-square"></i>` : "No Threats found!"}</span></p>) : "" }
                     </div>
+                    <div className="rounded-xl border border-slate-300 dark:border-slate-700 mb-5 md:p-10 p-5 flex flex-col">
+                        <p className="text-xl font-bold flex items-center gap-3 m-0 md:pr-10 pr-0 md:pb-0 pb-5 md:border-r border-r-0 md:border-b-0 border-b border-slate-300 dark:border-slate-700"><i className="fi fi-sr-shield-check"></i><span>Firewall: <span className={data.details.firewall === "None" ? "text-red-500" : ""}>{data.details.firewall}</span></span></p>
+                        <SecurityCard data={data.details}></SecurityCard>
+                    </div>
                     <PerformanceCard data={data}></PerformanceCard>
+                    <SEOCard data={data.ev}></SEOCard>
+                    <AccessibilityCard issues={data.access.results}></AccessibilityCard>
+                    <div className="p-10 flex w-full justify-center items-center">
+                        <button onClick={() => {window.dispatchEvent(new CustomEvent("open-collapsible")); setTimeout(() => {
+                            window.print();
+                            window.dispatchEvent(new CustomEvent("close-collapsible"));
+                        }, 200);}} className="btn btn-success btn-lg rounded-xl">
+                            <i className="fi fi-sr-file-export"></i>
+                            Export Report
+                        </button>
+                    </div>
                 </div>
             ) : (loading ? (
                 <div className="w-full h-full transition-all flex justify-center items-center">
