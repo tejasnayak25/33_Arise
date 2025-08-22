@@ -18,7 +18,7 @@ export default function Home() {
                         placeholder="Search..."
                         className="input rounded-full relative w-full bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-slate-100 shadow-lg focus:border-2 border-gray-300 placeholder:text-slate-400 dark:placeholder:text-slate-500 transition-all outline-none"
                         name="search"
-                        type="search"
+                        type="text"
                         id="url-input"
                         onKeyDown={(e:any) => {if(e.key === "Enter") {e.target.blur();}}}
                         onBlur={() => updateInput()}

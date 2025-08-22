@@ -10,6 +10,10 @@ export async function POST(request: NextRequest) {
         // Inject axe-core and run accessibility tests
         const results = await new AxePuppeteer(page).analyze();
 
+        if (!results) {
+            return NextResponse.json({ error: "Scan failed" }, { status: 500 });
+        }
+
         return NextResponse.json({ results: results.violations });
     } catch (e) {
         console.log(e);

@@ -1,8 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { changeTheme } from "@/lib/theme";
 
 const TopNav = ({ toggleSidebar, sidebarVisible }) => {
-  let [theme, setTheme] = useState(localStorage.getItem("theme"));
+  let [theme, setTheme] = useState(null);
+  useEffect(() => {
+    let tm = localStorage.getItem("theme");
+    if(tm) {
+      setTheme(tm);
+      changeTheme(tm === "dark" ? "light" : "dark", setTheme);
+    }
+  }, []);
   return (
     <header className="flex items-center relative justify-between px-6 py-4 text-slate-900 dark:text-slate-100">
       {/* Hamburger Menu */}

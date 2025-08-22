@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { loadMeta, loadScreenshot, loadDetails } from "@/lib/script";
+import { loadMeta, loadScreenshot, loadDetails, loadMetrics } from "@/lib/script";
+import PerformanceCard from "@/components/PerformanceCard";
 
 export default function Results({ url } : { url: any }) {
     let [ data, setData ] = useState<any>(null);
@@ -12,6 +13,8 @@ export default function Results({ url } : { url: any }) {
                 d.screenshot = ss;
                 let details = await loadDetails(url);
                 d.details = details;
+                let metrics = await loadMetrics(url);
+                d.metrics = metrics;
                 setData(d);
                 setLoading(false);
             });
@@ -42,10 +45,11 @@ export default function Results({ url } : { url: any }) {
                         </div>
                     </div>
                     <div className="rounded-xl border border-slate-300 dark:border-slate-700 mb-5 md:p-10 p-5 flex md:flex-row flex-col">
-                        <p className="md:text-2xl text-xl font-bold flex items-center gap-3 m-0 md:pr-10 pr-0 md:pb-0 pb-5 md:border-r border-r-0 md:border-b-0 border-b border-slate-300 dark:border-slate-700"><i className="fi fi-sr-ip-address"></i><span>{data.details.ip}</span></p>
-                        <p className="md:text-2xl text-xl font-bold flex items-center gap-3 m-0 md:px-10 px-0 md:py-0 py-5 md:border-r border-r-0 md:border-b-0 border-b border-slate-300 dark:border-slate-700"><span className={`${data.details.blackListed ? "bg-red-500" : "bg-green-500"} w-6 h-6 rounded-full`}></span><span>{data.details.blackListed ? "Site is Blacklisted" : "Site is not Blacklisted"}</span></p>
-                        <p className={`md:text-2xl text-xl font-bold flex items-center gap-3 m-0 md:px-10 px-0 md:py-0 py-5 md:border-r border-r-0 md:border-b-0 border-b border-slate-300 dark:border-slate-700 relative ${data.details.threats.length > 0 ? "text-red-500" : "text-slate-700 dark:text-slate-500"}`}><span className={`${data.details.threats.length > 0 ? "bg-red-500" : "bg-green-500"} w-6 h-6 rounded-full`}></span><span>{data.details.threats.length > 0 ? `${data.details.threats.length} Threats found! <i class=" absolute right-0 fi fi-sr-arrow-up-right-from-square"></i>` : "No Threats found!"}</span></p>
+                        <p className="text-xl font-bold flex items-center gap-3 m-0 md:pr-10 pr-0 md:pb-0 pb-5 md:border-r border-r-0 md:border-b-0 border-b border-slate-300 dark:border-slate-700"><i className="fi fi-sr-ip-address"></i><span>{data.details.ip}</span></p>
+                        <p className="text-xl font-bold flex items-center gap-3 m-0 md:px-10 px-0 md:py-0 py-5 md:border-r border-r-0 md:border-b-0 border-b border-slate-300 dark:border-slate-700"><span className={`${data.details.blackListed ? "bg-red-500" : "bg-green-500"} w-6 h-6 rounded-full`}></span><span>{data.details.blackListed ? "Site is Blacklisted" : "Site is not Blacklisted"}</span></p>
+                        { data.details.threats ? (<p className={`text-xl font-bold flex items-center gap-3 m-0 md:px-10 px-0 md:py-0 py-5 md:border-r border-r-0 md:border-b-0 border-b border-slate-300 dark:border-slate-700 relative ${data.details.threats.length > 0 ? "text-red-500" : "text-slate-700 dark:text-slate-500"}`}><span className={`${data.details.threats.length > 0 ? "bg-red-500" : "bg-green-500"} w-6 h-6 rounded-full`}></span><span>{data.details.threats?.length > 0 ? `${data.details.threats.length} Threats found! <i class=" absolute right-0 fi fi-sr-arrow-up-right-from-square"></i>` : "No Threats found!"}</span></p>) : "" }
                     </div>
+                    <PerformanceCard data={data}></PerformanceCard>
                 </div>
             ) : (loading ? (
                 <div className="w-full h-full transition-all flex justify-center items-center">
