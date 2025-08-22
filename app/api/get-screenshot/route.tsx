@@ -9,6 +9,7 @@ export async function POST(request: NextRequest) {
         await page.goto(url);
         let bin:any = (await page.screenshot({encoding: 'binary'}));
         let blob = new Blob([bin], {type: 'image/png'});
+        await browser.close();
         return new NextResponse(
             blob.stream(),
             {

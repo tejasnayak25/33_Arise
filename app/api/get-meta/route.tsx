@@ -23,6 +23,7 @@ export async function POST(request: NextRequest) {
         if(ev) {
             ev = await JSON.parse(ev);
         }
+        await browser.close();
         return NextResponse.json({ meta, ev });
     } catch (e) {
         console.log(e)

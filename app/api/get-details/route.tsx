@@ -43,6 +43,7 @@ export async function POST(request: NextRequest) {
         const page = await browser.newPage();
         await page.goto(url, { waitUntil: "domcontentloaded" });
         let title = await page.title();
+        await browser.close();
         return NextResponse.json({
             title: title,
             url,

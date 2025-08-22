@@ -19,6 +19,7 @@ export async function POST(request: NextRequest) {
         if(ev) {
             ev = await JSON.parse(ev);
         }
+        await browser.close();
         return NextResponse.json({ metrics, perf, ev });
     } catch (e) {
         return NextResponse.json({ error: e });
