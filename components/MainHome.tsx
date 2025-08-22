@@ -12,7 +12,7 @@ export default function Home() {
     return (
         <div className="w-full flex flex-col items-center justify-center flex-1 h-full p-5 text-slate-900 dark:text-slate-100">
             <div className="relative w-full md:px-32 px-0 transition-all">
-                <p className="text-2xl text-center mb-5">Site-Audit</p>
+                <p className="text-2xl text-center mb-5">Site-Scan</p>
                 <div className="w-full flex justify-center items-center relative mb-5">
                     <input
                         placeholder="Search..."

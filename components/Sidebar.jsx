@@ -14,7 +14,7 @@ const Sidebar = ({ sidebarVisible }) => {
       </div>
       {/* Site Title */}
       <div className="mb-10">
-        <span className="text-lg font-medium">Site Audit</span>
+        <span className="text-lg font-medium">Site-Scan</span>
       </div>
       {/* Menu */}
       <nav className="flex flex-col w-full space-y-2 px-4">
