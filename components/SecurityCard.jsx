@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FiChevronDown } from "react-icons/fi";
 
 export default function SecurityCard({ data }) {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [openHeaders, setOpenHeaders] = useState({});
 
   const toggleHeader = (index) => {
@@ -10,7 +10,7 @@ export default function SecurityCard({ data }) {
   };
 
   return (
-    <div className="rounded-xl border border-slate-300 dark:border-slate-700 mb-5">
+    <div className="rounded-xl border border-slate-300 dark:border-slate-700 mb-5 mt-8">
       {/* Card Header */}
       <div
         className="flex md:flex-row flex-col cursor-pointer p-5 md:p-10 items-start justify-between"
@@ -18,7 +18,7 @@ export default function SecurityCard({ data }) {
       >
         <div className="flex md:flex-row flex-col">
           <p className="text-xl font-bold flex items-center gap-3 m-0 md:pr-10 pr-0 md:pb-0 pb-5 md:border-r border-r-0 md:border-b-0 border-b border-slate-300 dark:border-slate-700">
-            <i className="fi fi-sr-universal-access"></i>
+            <i className="fi fi-sr-compliance-document"></i>
             <span>Security Evaluation</span>
           </p>
         </div>
@@ -34,7 +34,7 @@ export default function SecurityCard({ data }) {
       {/* Collapsible Content */}
       {isOpen && (
         <div className="flex flex-col gap-4 p-5 md:p-10 border-t border-slate-300 dark:border-slate-700">
-          {data.securityHeaders.map((header, idx) => (
+          {data.securityHeaders.headers.map((header, idx) => (
             <div
               key={idx}
               className="border border-slate-300 dark:border-slate-700 rounded-lg"

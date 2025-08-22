@@ -32,9 +32,13 @@ export async function POST(request: NextRequest) {
         }
         let ip = await getIP(url);
         let security:any = await checkSecurity(url);
-        if(security) {
-            security = await runAI(security, "eval_security");
-            console.log(security)
+        let firewall = security.firewall;
+        let securityHeaders = security.securityHeaders;
+        if(securityHeaders) {
+            securityHeaders = await runAI(JSON.stringify(securityHeaders), "eval_security");
+            if(securityHeaders) {
+                securityHeaders = JSON.parse(securityHeaders);
+            }
         }
         await page.goto(url, { waitUntil: "domcontentloaded" });
         let title = await page.title();
@@ -43,7 +47,8 @@ export async function POST(request: NextRequest) {
             url,
             ip,
             blackListed,
-            ...(security ?? {}),
+            firewall,
+            securityHeaders,
             threats
         });
     } catch (e) {

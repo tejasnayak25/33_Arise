@@ -61,9 +61,9 @@ const TopNav = ({ toggleSidebar, sidebarVisible }) => {
 
         {/* Profile (replace src as needed) */}
         <img
-          src="/path-to-your-profile-img.jpg"
+          src="./sitescan_without_bg&tagline.png"
           alt="Profile"
-          className="w-9 h-9 rounded-full object-cover bg-gray-200"
+          className="w-9 h-9 rounded-full object-cover object-center"
         />
       </div>
     </header>

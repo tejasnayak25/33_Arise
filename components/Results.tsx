@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { loadMeta, loadScreenshot, loadDetails, loadMetrics, loadAccessibility } from "@/lib/script";
+import { loadMeta, loadScreenshot, loadDetails, loadMetrics, loadAccessibility, loadSQL, loadXSS } from "@/lib/script";
 import PerformanceCard from "@/components/PerformanceCard";
 import SEOCard from "@/components/SEOCard";
 import AccessibilityCard from "@/components/AccessibilityCard";
@@ -20,6 +20,11 @@ export default function Results({ url } : { url: any }) {
                 d.metrics = metrics;
                 let access = await loadAccessibility(url);
                 d.access = access;
+                let sql = await loadSQL(url);
+                d.sql = sql;
+                let xss = await loadXSS(url);
+                d.xss = xss;
+                console.log(d)
                 setData(d);
                 setLoading(false);
             });
@@ -55,7 +60,13 @@ export default function Results({ url } : { url: any }) {
                         { data.details.threats ? (<p className={`text-xl font-bold flex items-center gap-3 m-0 md:px-10 px-0 md:py-0 py-5 md:border-r border-r-0 md:border-b-0 border-b border-slate-300 dark:border-slate-700 relative ${data.details.threats.length > 0 ? "text-red-500" : "text-slate-700 dark:text-slate-500"}`}><span className={`${data.details.threats.length > 0 ? "bg-red-500" : "bg-green-500"} w-6 h-6 rounded-full`}></span><span>{data.details.threats?.length > 0 ? `${data.details.threats.length} Threats found! <i class=" absolute right-0 fi fi-sr-arrow-up-right-from-square"></i>` : "No Threats found!"}</span></p>) : "" }
                     </div>
                     <div className="rounded-xl border border-slate-300 dark:border-slate-700 mb-5 md:p-10 p-5 flex flex-col">
-                        <p className="text-xl font-bold flex items-center gap-3 m-0 md:pr-10 pr-0 md:pb-0 pb-5 md:border-r border-r-0 md:border-b-0 border-b border-slate-300 dark:border-slate-700"><i className="fi fi-sr-shield-check"></i><span>Firewall: <span className={data.details.firewall === "None" ? "text-red-500" : ""}>{data.details.firewall}</span></span></p>
+                        <div className="flex">
+                            <p className="text-xl font-bold flex items-center gap-3 m-0 md:pr-10 pr-0 md:pb-0 pb-5 md:border-r border-r-0 md:border-b-0 border-b border-slate-300 dark:border-slate-700"><i className="fi fi-sr-shield-check"></i><span>Firewall: <span className={data.details.firewall === "None" ? "text-red-500" : ""}>{data.details.firewall}</span></span></p>
+                            <p className="text-xl font-bold flex items-center gap-3 m-0 md:px-10 px-0 md:py-0 py-5 border-slate-300 dark:border-slate-700">
+                                <i className="fi fi-sr-star text-yellow-300"></i>
+                                <span>{data.metrics.ev.overall_ratings} / 10</span>
+                            </p>
+                        </div>
                         <SecurityCard data={data.details}></SecurityCard>
                     </div>
                     <PerformanceCard data={data}></PerformanceCard>
