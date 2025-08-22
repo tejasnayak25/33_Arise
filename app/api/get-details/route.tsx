@@ -31,7 +31,11 @@ export async function POST(request: NextRequest) {
         }
         let ip = await getIP(url);
         let security = await checkSecurity(url);
+        await page.goto(url, { waitUntil: "domcontentloaded" });
+        let title = await page.title();
         return NextResponse.json({
+            title: title,
+            url,
             ip,
             blackListed,
             ...(security ?? {}),

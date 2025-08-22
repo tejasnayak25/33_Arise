@@ -1,35 +1,57 @@
-import { useEffect } from "react";
-
-function loadMeta(url: string) {
-    return new Promise((resolve, reject) => {
-        fetch("/api/get-meta", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ url }),
-        }).then((response) => response.json())
-        .then((data) => {
-            console.log(data);
-            resolve(data);
-        }).catch((error) => {
-            console.log(error);
-            resolve(null);
-        });
-    });
-}
+import { useEffect, useState } from "react";
+import { loadMeta, loadScreenshot, loadDetails } from "@/lib/script";
 
 export default function Results({ url } : { url: any }) {
+    let [ data, setData ] = useState<any>(null);
+    let [ loading, setLoading ] = useState(false);
     useEffect(() => {
         if(url) {
-            loadMeta(url).then(data => {
-                console.log(data);
+            setLoading(true);
+            loadMeta(url).then(async (d:any) => {
+                let ss = await loadScreenshot(url);
+                d.screenshot = ss;
+                let details = await loadDetails(url);
+                d.details = details;
+                setData(d);
+                setLoading(false);
             });
         }
     }, [ url ]);
     return (
-        <div id="results" className="w-full">
-            Output
+        <div id="results" className={`w-full transition-all ${loading || data ? "flex-1" : ""}`}>
+            { data ? (
+                <div className="w-full flex-1 transition-all md:px-32 px-0">
+                    <p className="text-xl text-center mb-5">Analysis</p>
+                    <div className="flex md:flex-row flex-col rounded-xl border border-slate-300 dark:border-slate-700 overflow-hidden w-full mb-5">
+                        <img
+                            src={data.screenshot}
+                            alt="Screenshot"
+                            className=" md:w-1/2 w-full object-cover md:border-r border-b md:border-b-0 border-slate-300 dark:border-slate-700"
+                        />
+                        <div className="flex flex-col p-10 justify-center">
+                            <p className="text-2xl font-bold mb-5">{data.details.title}</p>
+                            <p className="mb-10 texb-xy breyk-all">{data.details.url}</p>
+                            <a
+                                href={data.details.url}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="btn btn-primary rounded-full"
+                            >
+                                Visit
+                            </a>
+                        </div>
+                    </div>
+                    <div className="rounded-xl border border-slate-300 dark:border-slate-700 mb-5 md:p-10 p-5 flex md:flex-row flex-col">
+                        <p className="md:text-2xl text-xl font-bold flex items-center gap-3 m-0 md:pr-10 pr-0 md:pb-0 pb-5 md:border-r border-r-0 md:border-b-0 border-b border-slate-300 dark:border-slate-700"><i className="fi fi-sr-ip-address"></i><span>{data.details.ip}</span></p>
+                        <p className="md:text-2xl text-xl font-bold flex items-center gap-3 m-0 md:px-10 px-0 md:py-0 py-5 md:border-r border-r-0 md:border-b-0 border-b border-slate-300 dark:border-slate-700"><span className={`${data.details.blackListed ? "bg-red-500" : "bg-green-500"} w-6 h-6 rounded-full`}></span><span>{data.details.blackListed ? "Site is Blacklisted" : "Site is not Blacklisted"}</span></p>
+                        <p className={`md:text-2xl text-xl font-bold flex items-center gap-3 m-0 md:px-10 px-0 md:py-0 py-5 md:border-r border-r-0 md:border-b-0 border-b border-slate-300 dark:border-slate-700 relative ${data.details.threats.length > 0 ? "text-red-500" : "text-slate-700 dark:text-slate-500"}`}><span className={`${data.details.threats.length > 0 ? "bg-red-500" : "bg-green-500"} w-6 h-6 rounded-full`}></span><span>{data.details.threats.length > 0 ? `${data.details.threats.length} Threats found! <i class=" absolute right-0 fi fi-sr-arrow-up-right-from-square"></i>` : "No Threats found!"}</span></p>
+                    </div>
+                </div>
+            ) : (loading ? (
+                <div className="w-full h-full transition-all flex justify-center items-center">
+                    <i className="fi fi-sr-loading animate-spin text-3xl -mt-16 flex justify-center items-center"></i>
+                </div>
+            ) : "") }
         </div>
     );
 }
