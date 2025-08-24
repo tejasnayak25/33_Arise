@@ -3,10 +3,5 @@
         "env": {
         "PUPPETEER_CACHE_DIR": "/tmp"
         }
-    },
-    "functions": {
-        "app/api/**/*.tsx": {
-            "externalNodeModules": ["@sparticuz/chromium", "puppeteer-core"]
-        }
     }
 }
