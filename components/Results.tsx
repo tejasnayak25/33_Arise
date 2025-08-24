@@ -17,20 +17,23 @@ export default function Results({ url, deepSearch } : { url: any, deepSearch: an
         if(url) {
             setData(null);
             setLoading(true);
-            loadMeta(url).then(async (d: any) => {
+            (async () => {
+                let d:any = {};
                 try {
                     // Run main tasks in parallel
-                    const [ss, details, metrics, access] = await Promise.all([
+                    const [ss, details, metrics, access, meta] = await Promise.all([
                     loadScreenshot(url),
                     loadDetails(url),
                     loadMetrics(url),
-                    loadAccessibility(url)
+                    loadAccessibility(url),
+                    loadMeta(url)
                     ]);
 
                     d.screenshot = ss;
                     d.details = details;
                     d.metrics = metrics;
                     d.access = access;
+                    d.meta = meta;
 
                     if (deepSearch) {
                     // Run deepSearch tasks in parallel too
@@ -49,8 +52,7 @@ export default function Results({ url, deepSearch } : { url: any, deepSearch: an
                     console.error("Error loading data:", err);
                     setLoading(false);
                 }
-                });
-
+            })();
         }
     }, [ url, deepSearch ]);
     return (
@@ -79,7 +81,7 @@ export default function Results({ url, deepSearch } : { url: any, deepSearch: an
                     </div>
                     <div className="rounded-xl bg-slate-100 border border-slate-300 dark:border-slate-700 mb-5 md:p-10 p-5 md:max-h-[500px] max-h-none flex flex-col items-center">
                         {/* <DonutChart data={chartData}></DonutChart> */}
-                        <RadarChart metrics={{ performance: data.metrics?.ev?.overall_ratings, security: data.details?.securityHeaders?.overall_ratings, seo: data.ev?.overall_ratings }}></RadarChart>
+                        <RadarChart metrics={{ performance: data.metrics?.ev?.overall_ratings, security: data.details?.securityHeaders?.overall_ratings, seo: data.meta?.ev?.overall_ratings }}></RadarChart>
                     </div>
                     <div className="rounded-xl border border-slate-300 dark:border-slate-700 mb-5 md:p-10 p-5 flex md:flex-row flex-col">
                         <p className="text-xl font-bold flex items-center gap-3 m-0 md:pr-10 pr-0 md:pb-0 pb-5 md:border-r border-r-0 md:border-b-0 border-b border-slate-300 dark:border-slate-700"><i className="fi fi-sr-ip-address"></i><span>{data.details.ip}</span></p>
@@ -94,15 +96,15 @@ export default function Results({ url, deepSearch } : { url: any, deepSearch: an
                                 <span>{data.details?.securityHeaders?.overall_ratings ?? 0} / 10</span>
                             </p>
                         </div>
-                        { data.details.error ? ("") : (<SecurityCard data={data.details}></SecurityCard>) }
+                        { data.details?.error ? ("") : (<SecurityCard data={data.details}></SecurityCard>) }
                     </div>
-                    { data.metrics.error ? ("") : (<PerformanceCard data={data}></PerformanceCard>) }
-                    { data.ev.error ? ("") : (<SEOCard data={data.ev}></SEOCard>) }
-                    { data.access.error ? ("") : (<AccessibilityCard issues={data.access.results}></AccessibilityCard>) }
+                    { data.metrics?.error ? ("") : (<PerformanceCard data={data}></PerformanceCard>) }
+                    { data.meta?.ev?.error ? ("") : (<SEOCard data={data.meta.ev}></SEOCard>) }
+                    { data.access?.error ? ("") : (<AccessibilityCard issues={data.access.results}></AccessibilityCard>) }
                     {deepSearch && (
                         <>
-                            {data.sql.error ? "" : <SQLInjectionCard data={data.sql.data} />}
-                            {data.xss.error ? "" : <XSSCard data={data.xss.data} />}
+                            {data.sql?.error ? "" : <SQLInjectionCard data={data.sql.data} />}
+                            {data.xss?.error ? "" : <XSSCard data={data.xss.data} />}
                         </>
                     )}
                     <div className="p-10 flex w-full justify-center items-center">
