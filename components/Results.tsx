@@ -17,28 +17,40 @@ export default function Results({ url, deepSearch } : { url: any, deepSearch: an
         if(url) {
             setData(null);
             setLoading(true);
-            loadMeta(url).then(async (d:any) => {
-                let ss = await loadScreenshot(url);
-                d.screenshot = ss;
-                let details = await loadDetails(url);
-                d.details = details;
-                let metrics = await loadMetrics(url);
-                d.metrics = metrics;
-                let access = await loadAccessibility(url);
-                d.access = access;
-                console.log(deepSearch)
-                if(deepSearch) {
-                    let sql = await loadSQL(url);
+            loadMeta(url).then(async (d: any) => {
+                try {
+                    // Run main tasks in parallel
+                    const [ss, details, metrics, access] = await Promise.all([
+                    loadScreenshot(url),
+                    loadDetails(url),
+                    loadMetrics(url),
+                    loadAccessibility(url)
+                    ]);
+
+                    d.screenshot = ss;
+                    d.details = details;
+                    d.metrics = metrics;
+                    d.access = access;
+
+                    if (deepSearch) {
+                    // Run deepSearch tasks in parallel too
+                    const [sql, xss] = await Promise.all([
+                        loadSQL(url),
+                        loadXSS(url)
+                    ]);
                     d.sql = sql;
-                    let xss = await loadXSS(url);
                     d.xss = xss;
+                    }
+
+                    console.log(d);
+                    setData(d);
+                    setLoading(false);
+                } catch (err) {
+                    console.error("Error loading data:", err);
+                    setLoading(false);
                 }
+                });
 
-
-                console.log(d)
-                setData(d);
-                setLoading(false);
-            });
         }
     }, [ url, deepSearch ]);
     return (
@@ -82,13 +94,17 @@ export default function Results({ url, deepSearch } : { url: any, deepSearch: an
                                 <span>{data.details?.securityHeaders?.overall_ratings ?? 0} / 10</span>
                             </p>
                         </div>
-                        <SecurityCard data={data.details}></SecurityCard>
+                        { data.details.error ? ("") : (<SecurityCard data={data.details}></SecurityCard>) }
                     </div>
-                    <PerformanceCard data={data}></PerformanceCard>
-                    <SEOCard data={data.ev}></SEOCard>
-                    <AccessibilityCard issues={data.access.results}></AccessibilityCard>
-                    {deepSearch ? [<SQLInjectionCard data={data.sql.data}></SQLInjectionCard>,
-                        <XSSCard data={data.xss.data}></XSSCard>] : ""}
+                    { data.metrics.error ? ("") : (<PerformanceCard data={data}></PerformanceCard>) }
+                    { data.ev.error ? ("") : (<SEOCard data={data.ev}></SEOCard>) }
+                    { data.access.error ? ("") : (<AccessibilityCard issues={data.access.results}></AccessibilityCard>) }
+                    {deepSearch && (
+                        <>
+                            {data.sql.error ? "" : <SQLInjectionCard data={data.sql.data} />}
+                            {data.xss.error ? "" : <XSSCard data={data.xss.data} />}
+                        </>
+                    )}
                     <div className="p-10 flex w-full justify-center items-center">
                         <button onClick={() => {window.dispatchEvent(new CustomEvent("open-collapsible")); setTimeout(() => {
                             window.print();
