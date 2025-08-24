@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
   serverExternalPackages: ["@sparticuz/chromium", "puppeteer-core"],
   outputFileTracingIncludes: {
     'app/api/**/*': [
-      './node_modules/@sparticuz/chromium',
+      './node_modules/@sparticuz/chromium/**/*',
     ],
   }
 };
