@@ -3,7 +3,7 @@ import React, { useState } from "react";
 const Sidebar = ({ sidebarVisible }) => {
   
   return (
-    <aside className={`md:w-64 w-full z-[41] md:max-w-64 max-w-full ${ sidebarVisible ? "ml-0 " : "md:-ml-64 -ml-96" } md:relative absolute md:bg-transparent dark:md:bg-transparent bg-slate-100 dark:bg-slate-950 overflow-hidden transition-all text-slate-900 dark:text-slate-100 flex-1 md:min-h-0 min-h-full flex flex-col items-center py-8`}>
+    <aside className={`md:w-64 w-full z-[41] md:max-w-64 max-w-full ${ sidebarVisible ? "ml-0 " : "md:-ml-64 -ml-[100dvw]" } md:relative absolute md:bg-transparent dark:md:bg-transparent bg-slate-100 dark:bg-slate-950 overflow-hidden transition-all text-slate-900 dark:text-slate-100 flex-1 md:min-h-0 min-h-full flex flex-col items-center py-8`}>
       {/* Profile Circle */}
       <div className="mb-6">
     <img
